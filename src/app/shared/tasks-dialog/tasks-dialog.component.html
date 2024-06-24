@@ -1,0 +1,30 @@
+<h1 *ngIf="!isChange" mat-dialog-title>Create Tasks</h1>
+<h1 *ngIf="isChange" mat-dialog-title>Edit Tasks</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Title</mat-label>
+    <input matInput [(ngModel)]="data.title">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Responsible</mat-label>
+    <input matInput [(ngModel)]="data.responsible">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Data Create</mat-label>
+    <input matInput [(ngModel)]="data.dateCreate">
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label >Data End</mat-label>
+    <input color="" matInput [(ngModel)]="data.dateEnd">
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label >Finish</mat-label>
+    <input color="" matInput [(ngModel)]="data.finish">
+  </mat-form-field>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button *ngIf="!isChange"  [mat-dialog-close]="data" cdkFocusInitial>Create</button>
+  <button mat-button *ngIf="isChange"  [mat-dialog-close]="data" cdkFocusInitial>Edit</button>
+</div>
