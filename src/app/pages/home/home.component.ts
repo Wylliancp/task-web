@@ -7,18 +7,18 @@ import { Tasks } from 'src/app/models/tasks';
 import { TasksDialogComponent } from 'src/app/shared/tasks-dialog/tasks-dialog.component';
 import { TasksResponse } from 'src/app/models/response/tasksResponse';
 
-const ELEMENT_DATA: Tasks[] = [
-  {id: 1, title: 'Hydrogen', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
-  {id: 2, title: 'Helium', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
-  {id: 3, title: 'Lithium', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
-  {id: 4, title: 'Beryllium', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
-  {id: 5, title: 'Boron', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
-  {id: 6, title: 'Carbon', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
-  {id: 7, title: 'Nitrogen', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
-  {id: 8, title: 'Oxygen', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
-  {id: 9, title: 'Fluorine', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
-  {id: 10,title: 'Neon', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
-];
+// const ELEMENT_DATA: Tasks[] = [
+//   {id: 1, title: 'Hydrogen', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
+//   {id: 2, title: 'Helium', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
+//   {id: 3, title: 'Lithium', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
+//   {id: 4, title: 'Beryllium', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
+//   {id: 5, title: 'Boron', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
+//   {id: 6, title: 'Carbon', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
+//   {id: 7, title: 'Nitrogen', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
+//   {id: 8, title: 'Oxygen', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
+//   {id: 9, title: 'Fluorine', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
+//   {id: 10,title: 'Neon', responsible: EResponsible.Eu, dateCreate: '12/08/2023', dateEnd: '12/09/2023', finish: false},
+// ];
 
 @Component({
   selector: 'app-home',
@@ -29,25 +29,26 @@ const ELEMENT_DATA: Tasks[] = [
 export class HomeComponent implements OnInit {
   @ViewChild(MatTable)
   table!: MatTable<any>;
-  displayedColumns: string[] = ['id', 'title', 'responsible', 'dateCreate', 'dateEnd','finish', 'actions'];
+  displayedColumns: string[] = ['id', 'title', 'responsible', 'dateCreate', 'dateEnd','finished', 'actions'];
   dataSource!: Tasks[];
 
 
   constructor(    public dialog: MatDialog
     ,public tasksService: TasksService ) {
-    this.tasksService.getAll()
-    .subscribe((data: Tasks[]) => {
-      console.log(data);
-      this.dataSource = data;
-    });
-    // this.dataSource = ELEMENT_DATA;//data;
-
-
    }
 
   ngOnInit(): void {
+    this.getAll()
   }
 
+
+   getAll() : void {
+    this.tasksService.getAll()
+      .subscribe((data: Tasks[]) => {
+        console.log(data);
+        this.dataSource = data;
+      });
+  }
 
   editElement(tasks: Tasks): void {
     this.openDialog(tasks);
@@ -77,7 +78,7 @@ export class HomeComponent implements OnInit {
         responsible: tasks.responsible,
         dataCreate: tasks.dateCreate,
         dataEnd: tasks.dateEnd,
-        finish: tasks.finish,
+        finish: tasks.finished,
       }
     });
 
@@ -85,16 +86,18 @@ export class HomeComponent implements OnInit {
     if (result !== undefined) {
       console.log(result);
       if (this.dataSource.map(p => p.id).includes(result.id)) {
-        this.tasksService.finish(result)
+        this.tasksService.Update(result)
           .subscribe((data: TasksResponse) => {
             const index = this.dataSource.findIndex(p => p.id === data.data.id);
-            this.dataSource[index] = data.data;
+            this.getAll();
+            // this.dataSource[index] = data.data;
             this.table.renderRows();
           });
       } else {
         this.tasksService.create(result)
           .subscribe((data: TasksResponse) => {
-            this.dataSource.push(data.data);
+            this.getAll();
+            // this.dataSource.push(data.data);
             this.table.renderRows();
           });
       }

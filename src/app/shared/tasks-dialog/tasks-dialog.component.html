@@ -6,20 +6,20 @@
     <input matInput [(ngModel)]="data.title">
   </mat-form-field>
   <mat-form-field>
-    <mat-label>Responsible</mat-label>
-    <input matInput [(ngModel)]="data.responsible">
+      <mat-label>Responsible</mat-label>
+      <mat-select [(ngModel)]="data.responsible">
+        <mat-option value="Eu">Eu</mat-option>
+        <mat-option value="Esposa">Esposa</mat-option>
+        <mat-option value="Filho">Filho</mat-option>
+        <mat-option value="Outros">Outros</mat-option>
+      </mat-select>
   </mat-form-field>
   <mat-form-field>
-    <mat-label>Data Create</mat-label>
-    <input matInput [(ngModel)]="data.dateCreate">
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label >Data End</mat-label>
-    <input color="" matInput [(ngModel)]="data.dateEnd">
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label >Finish</mat-label>
-    <input color="" matInput [(ngModel)]="data.finish">
+    <mat-label>Finish</mat-label>
+      <mat-select  [(ngModel)]="data.finished">
+        <mat-option value=false>In Progress</mat-option>
+        <mat-option value=true>Finish</mat-option>
+      </mat-select>
   </mat-form-field>
 
 </div>

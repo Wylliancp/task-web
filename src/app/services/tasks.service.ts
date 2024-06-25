@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Tasks } from '../models/tasks';
 import { Observable } from 'rxjs';
@@ -20,10 +20,29 @@ export class TasksService {
   }
 
   create(tasks: Tasks): Observable<TasksResponse> {
-    return this.http.post<TasksResponse>(this.baseUrl + '/Create', JSON.stringify(tasks));
+    const paramsCreate = {
+      "title": tasks.title,
+      "responsible": tasks.responsible,
+      "finished": tasks.finished = true ? true : false,
+    }
+    return this.http.post<TasksResponse>(this.baseUrl + '/Create', paramsCreate);
+  }
+
+  Update(tasks: Tasks): Observable<TasksResponse> {
+    console.log(tasks.finished);
+    const paramsUpdate = {
+      "id": tasks.id,
+      "title": tasks.title,
+      "responsible": tasks.responsible,
+      "finished": tasks.finished = true ? true : false,
+    }
+    return this.http.put<TasksResponse>(this.baseUrl + '/Update', paramsUpdate);
   }
 
   finish(id: number): Observable<TasksResponse> {
+    const paramsCreate = {
+      "Id": id,
+    }
     return this.http.put<TasksResponse>(this.baseUrl + '/Finish', JSON.stringify(id));
   }
 

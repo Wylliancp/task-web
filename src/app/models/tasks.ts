@@ -6,5 +6,5 @@ export interface Tasks {
   responsible: EResponsible;
   dateCreate: string;
   dateEnd: string;
-  finish: boolean;
+  finished: boolean;
 }
