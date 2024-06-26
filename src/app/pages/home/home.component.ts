@@ -71,14 +71,14 @@ export class HomeComponent implements OnInit {
         responsible: '',
         dataCreate: null,
         dataEnd: '',
-        finish: '',
+        finished: '',
       } : {
         id: tasks.id,
         title: tasks.title,
         responsible: tasks.responsible,
         dataCreate: tasks.dateCreate,
         dataEnd: tasks.dateEnd,
-        finish: tasks.finished,
+        finished: tasks.finished,
       }
     });
 
