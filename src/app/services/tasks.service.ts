@@ -47,15 +47,18 @@ export class TasksService {
   }
 
   finish(id: number): Observable<TasksResponse> {
-    const paramsCreate = {
+    const paramsFinish = {
       "Id": id,
     }
-    return this.http.put<TasksResponse>(this.baseUrl + '/Finish', JSON.stringify(id));
+    return this.http.put<TasksResponse>(this.baseUrl + '/Finish', paramsFinish);
   }
 
   reOpen(id: number): Observable<TasksResponse>
   {
-    return this.http.put<TasksResponse>(this.baseUrl + '/reOpen', JSON.stringify(id));
+    const paramsReOpen = {
+      "Id": id,
+    }
+    return this.http.put<TasksResponse>(this.baseUrl + '/reOpen', paramsReOpen);
   }
 
   delete(id:number): Observable<TasksResponse>

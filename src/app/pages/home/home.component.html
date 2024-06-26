@@ -42,6 +42,16 @@
       <button mat-icon-button (click)="deleteElement(element.id)" color="primary">
         <mat-icon>delete</mat-icon>
       </button>
+      <button mat-icon-button *ngIf="element.finished; else showloading" (click)="markInProgress(element.id)" color="primary">
+        <mat-icon>done</mat-icon>
+        <mat-label>Ok</mat-label>
+      </button>
+      <ng-template #showloading>
+      <button mat-icon-button (click)="markFinish(element.id)" color="primary">
+        <mat-icon>timeline</mat-icon>
+        <mat-label>Loading</mat-label>
+      </button>
+    </ng-template>
     </td>
   </ng-container>
 

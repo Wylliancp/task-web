@@ -24,30 +24,45 @@ import { TasksResponse } from 'src/app/models/response/tasksResponse';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  providers: [ TasksService ]
+  providers: [TasksService],
 })
 export class HomeComponent implements OnInit {
   @ViewChild(MatTable)
   table!: MatTable<any>;
-  displayedColumns: string[] = ['id', 'title', 'responsible', 'dateCreate', 'dateEnd','finished', 'actions'];
+  displayedColumns: string[] = [
+    'id',
+    'title',
+    'responsible',
+    'dateCreate',
+    'dateEnd',
+    'finished',
+    'actions',
+  ];
   dataSource!: Tasks[];
 
-
-  constructor(    public dialog: MatDialog
-    ,public tasksService: TasksService ) {
-   }
+  constructor(public dialog: MatDialog, public tasksService: TasksService) {}
 
   ngOnInit(): void {
-    this.getAll()
+    this.getAll();
   }
 
+  getAll(): void {
+    this.tasksService.getAll().subscribe((data: Tasks[]) => {
+      console.log(data);
+      this.dataSource = data;
+    });
+  }
 
-   getAll() : void {
-    this.tasksService.getAll()
-      .subscribe((data: Tasks[]) => {
-        console.log(data);
-        this.dataSource = data;
-      });
+  markFinish(id: number) : void {
+    this.tasksService.finish(id).subscribe(() => {
+      this.getAll();
+     })
+  }
+
+  markInProgress(id: number) : void {
+    this.tasksService.reOpen(id).subscribe(() => {
+      this.getAll();
+    });
   }
 
   editElement(tasks: Tasks): void {
@@ -55,55 +70,53 @@ export class HomeComponent implements OnInit {
   }
 
   deleteElement(id: number): void {
-    this.tasksService.delete(id)
-      .subscribe(() => {
-        this.dataSource = this.dataSource.filter(p => p.id !== id);
-      });
+    this.tasksService.delete(id).subscribe(() => {
+      this.dataSource = this.dataSource.filter((p) => p.id !== id);
+    });
   }
-
-
 
   openDialog(tasks: Tasks | null): void {
     const dialogRef = this.dialog.open(TasksDialogComponent, {
       width: '250px',
-      data: tasks === null ? {
-        title: null,
-        responsible: '',
-        dataCreate: null,
-        dataEnd: '',
-        finished: '',
-      } : {
-        id: tasks.id,
-        title: tasks.title,
-        responsible: tasks.responsible,
-        dataCreate: tasks.dateCreate,
-        dataEnd: tasks.dateEnd,
-        finished: tasks.finished.toString(),//TODO
-      }
+      data:
+        tasks === null
+          ? {
+              title: null,
+              responsible: '',
+              dataCreate: null,
+              dataEnd: '',
+              finished: '',
+            }
+          : {
+              id: tasks.id,
+              title: tasks.title,
+              responsible: tasks.responsible,
+              dataCreate: tasks.dateCreate,
+              dataEnd: tasks.dateEnd,
+              finished: tasks.finished.toString(), //TODO
+            },
     });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result !== undefined) {
-      console.log(result);
-      if (this.dataSource.map(p => p.id).includes(result.id)) {
-        this.tasksService.Update(result)
-          .subscribe((data: TasksResponse) => {
-            const index = this.dataSource.findIndex(p => p.id === data.data.id);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result !== undefined) {
+        console.log(result);
+        if (this.dataSource.map((p) => p.id).includes(result.id)) {
+          this.tasksService.Update(result).subscribe((data: TasksResponse) => {
+            const index = this.dataSource.findIndex(
+              (p) => p.id === data.data.id
+            );
             this.getAll();
             // this.dataSource[index] = data.data;
             this.table.renderRows();
           });
-      } else {
-        this.tasksService.create(result)
-          .subscribe((data: TasksResponse) => {
+        } else {
+          this.tasksService.create(result).subscribe((data: TasksResponse) => {
             this.getAll();
             // this.dataSource.push(data.data);
             this.table.renderRows();
           });
+        }
       }
-    }
-  });
+    });
+  }
 }
-}
-
-
