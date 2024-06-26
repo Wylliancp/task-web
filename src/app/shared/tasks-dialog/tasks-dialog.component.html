@@ -15,13 +15,12 @@
       </mat-select>
   </mat-form-field>
   <mat-form-field>
-    <mat-label>Finish</mat-label>
-      <mat-select  [(ngModel)]="data.finished">
-        <mat-option value=false>In Progress</mat-option>
-        <mat-option value=true>Finish</mat-option>
+    <mat-label>Status</mat-label>
+      <mat-select [(ngModel)]="data.finished">
+        <mat-option value="false">In Progress</mat-option>
+        <mat-option value="true">Finish</mat-option>
       </mat-select>
   </mat-form-field>
-
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onCancel()">Cancel</button>

@@ -78,7 +78,7 @@ export class HomeComponent implements OnInit {
         responsible: tasks.responsible,
         dataCreate: tasks.dateCreate,
         dataEnd: tasks.dateEnd,
-        finished: tasks.finished,
+        finished: tasks.finished.toString(),//TODO
       }
     });
 
